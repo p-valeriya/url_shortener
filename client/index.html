@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>URLShortener</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>URLShortener</h1>
+    <form>
+        <label>Введите адрес страницы:</label><br>
+        <input type="text" name="url_long" style="width: 300px;"><br><br>
+        <label>Введите желаемый адрес короткой ссылки (опционально):</label><br>
+        <input type="text" name="user_url_short" style="width: 300px;" maxlength="13"><br><br>
+        <input type="submit" value="Сгенерировать">
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+        document.querySelector('form').onsubmit = async (e) => {
+            e.preventDefault();
+            const url_long =  document.querySelector('input[name="url_long"]').value;
+            const user_url_short = document.querySelector('input[name="user_url_short"]').value;
+            if(url_long == ""){
+                document.getElementById('result').innerHTML = "";
+                return;
+            }
+            
+            const response = await fetch('http://localhost:8080/', {
+                method: 'POST',
+                body: JSON.stringify({
+                            url_long,
+                            user_url_short
+                        })
+            });
+            
+            const text = await response.text();
+            document.getElementById('result').innerHTML = `<a href = "http://localhost:8080/${text}">http://localhost:8080/${text}</a>`;
+        };
+    </script>
+</body>
+</html>
